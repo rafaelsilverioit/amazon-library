@@ -1,0 +1,8 @@
+---
+applications:
+- name: livraria
+  memory: 256M
+  instances: 1
+  host: localhost
+  domain: localhost
+  path: build/libs/livraria-0.1.0.jar
