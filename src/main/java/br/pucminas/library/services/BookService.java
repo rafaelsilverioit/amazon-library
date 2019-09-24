@@ -1,4 +1,4 @@
-package br.pucminas.livraria.controllers;
+package br.pucminas.library.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,32 +6,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.pucminas.livraria.dao.Book;
+import br.pucminas.library.dao.Book;
 
-@RestController
-public class BookController {
-	public static final List<Book> books = new ArrayList<>();
+@Service
+public class BookService {
 	private final List<Integer> authors = Arrays.asList(new Integer[] {1, 2});
 	
-	@RequestMapping("/books")
+	public static final List<Book> books = new ArrayList<>();
+	
 	public List<Book> books() {
 		return books;
 	}
 	
-	@RequestMapping("/books/{isbn}")
-	public Book book(@PathVariable("isbn") String isbn) {
+	public Book book(String isbn) {
 		Optional<Book> book = books
 			.stream()
 			.filter(b -> b.getIsbn().equalsIgnoreCase(isbn))
@@ -44,8 +35,7 @@ public class BookController {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
 	}
 	
-	@PostMapping("/books")
-	public Book create(@Valid @RequestBody Book book) {
+	public Book create(Book book) {
 		Optional<Book> maybeBook = getBook(book);
 		
 		if(maybeBook.isPresent()) {
@@ -61,8 +51,7 @@ public class BookController {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found!");
 	}
 	
-	@PutMapping("/books")
-	public Book update(@Valid @RequestBody Book book) {
+	public Book update(Book book) {
 		Optional<Book> maybeBook = getBook(book);
 		
 		if(maybeBook.isPresent() && authors.contains(book.getAuthor())) {
@@ -76,8 +65,7 @@ public class BookController {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book or author not found!");
 	}
 	
-	@DeleteMapping("/books/{isbn}")
-	public void delete(@PathVariable("isbn") String isbn) {
+	public void delete(String isbn) {
 		Optional<Book> maybeBook = getBook(isbn);
 		
 		if(maybeBook.isPresent()) {

@@ -1,28 +1,19 @@
-package br.pucminas.livraria.controllers;
+package br.pucminas.library.services;
 
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.pucminas.livraria.dao.Book;
-import br.pucminas.livraria.dao.Comment;
+import br.pucminas.library.dao.Book;
+import br.pucminas.library.dao.Comment;
 
-@RestController
-public class CommentController {
-	@RequestMapping("/books/{isbn}/comments")
-	public List<Comment> comments(@PathVariable("isbn") String isbn) {
-		Optional<Book> book = BookController.getBook(isbn);
+@Service
+public class CommentService {
+	public List<Comment> comments(String isbn) {
+		Optional<Book> book = BookService.getBook(isbn);
 		
 		if(book.isPresent()) {
 			return book.get().getComments();			
@@ -31,9 +22,8 @@ public class CommentController {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
 	}
 	
-	@RequestMapping("/books/{isbn}/comments/{id}")
-	public Comment comment(@PathVariable("isbn") String isbn, @PathVariable("id") Integer id) {
-		Optional<Book> book = BookController.getBook(isbn);
+	public Comment comment(String isbn, Integer id) {
+		Optional<Book> book = BookService.getBook(isbn);
 		
 		if(book.isPresent()) {
 			Optional<Comment> comment = book
@@ -53,9 +43,8 @@ public class CommentController {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
 	}
 	
-	@PostMapping("/books/{isbn}/comments")
-	public Comment create(@PathVariable("isbn") String isbn, @Valid @RequestBody Comment comment) {
-		Optional<Book> book = BookController.getBook(isbn);
+	public Comment create(String isbn, Comment comment) {
+		Optional<Book> book = BookService.getBook(isbn);
 		
 		if(!book.isPresent()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
@@ -68,9 +57,8 @@ public class CommentController {
 		return comment;
 	}
 	
-	@PutMapping("/books/{isbn}/comments")
-	public Comment update(@PathVariable("isbn") String isbn, @Valid @RequestBody Comment comment) {
-		Optional<Book> maybeBook = BookController.getBook(isbn);
+	public Comment update(String isbn, Comment comment) {
+		Optional<Book> maybeBook = BookService.getBook(isbn);
 		
 		if(maybeBook.isPresent()) {
 			List<Comment> comments = maybeBook.get().getComments();
@@ -92,9 +80,8 @@ public class CommentController {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
 	}
 	
-	@DeleteMapping("/books/{isbn}/comments/{id}")
-	public void delete(@PathVariable("isbn") String isbn, @PathVariable("id") Integer id) {
-		Optional<Book> maybeBook = BookController.getBook(isbn);
+	public void delete(String isbn, Integer id) {
+		Optional<Book> maybeBook = BookService.getBook(isbn);
 		
 		if(maybeBook.isPresent()) {
 			List<Comment> comments = maybeBook.get().getComments();

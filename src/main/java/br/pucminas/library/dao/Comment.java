@@ -1,10 +1,13 @@
-package br.pucminas.livraria.dao;
+package br.pucminas.library.dao;
 
 import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel
 public class Comment {
 	@NotNull private Integer id;
 	@NotNull private Integer userId;

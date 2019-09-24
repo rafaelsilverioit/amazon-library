@@ -1,4 +1,4 @@
-package br.pucminas.livraria.dao;
+package br.pucminas.library.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +7,11 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.swagger.annotations.ApiModel;
+
+@ApiModel
 public class Book {
 	@NotBlank private String isbn;
 	@NotBlank private String name;
@@ -14,6 +19,8 @@ public class Book {
 	@NotNull private Integer author;
 	
 	private Date createdAt;
+	
+	@JsonIgnore
 	private List<Comment> comments = new ArrayList<>();
 	
 	public Book() {}
