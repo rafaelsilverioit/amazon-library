@@ -23,7 +23,8 @@ public class Swagger2Config {
 			.apiInfo(apiInfo())
 			.tags(
 				new Tag("Books", "Endpoint para o gerenciamento do acervo."),
-				new Tag("Comments", "Endpoint para o gerenciamento dos comentários em livros do acervo."));
+				new Tag("Comments", "Endpoint para o gerenciamento dos comentários em livros do acervo."),
+				new Tag("Basket", "Endpoint para o gerenciamento dos carrinhos de compras."));
 	}
 	
 	private ApiInfo apiInfo() {

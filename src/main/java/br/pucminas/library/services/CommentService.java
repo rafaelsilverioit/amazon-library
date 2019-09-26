@@ -1,29 +1,44 @@
 package br.pucminas.library.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.pucminas.library.dao.Book;
-import br.pucminas.library.dao.Comment;
+import br.pucminas.library.Pagination;
+import br.pucminas.library.models.Book;
+import br.pucminas.library.models.Comment;
 
 @Service
 public class CommentService {
-	public List<Comment> comments(String isbn) {
-		Optional<Book> book = BookService.getBook(isbn);
+	@Autowired
+	private BookService bookService;
+	
+	public Pagination<Comment> comments(String isbn, Integer limit, Integer offset) {
+		Optional<Book> book = bookService.getBook(isbn);
 		
 		if(book.isPresent()) {
-			return book.get().getComments();			
+			int newLimit = offset + limit;
+			
+			List<Comment> comments = book.get().getComments();
+			int size = comments.size();
+			
+			List<Comment> subList = comments.subList(offset, (newLimit <= size ? newLimit : size));
+			offset = offset <= size ? offset : size;
+			
+			Pagination<Comment> paginated = new Pagination<Comment>(subList, limit, offset);
+			return paginated;			
 		}
 		
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
 	}
 	
 	public Comment comment(String isbn, Integer id) {
-		Optional<Book> book = BookService.getBook(isbn);
+		Optional<Book> book = bookService.getBook(isbn);
 		
 		if(book.isPresent()) {
 			Optional<Comment> comment = book
@@ -44,21 +59,22 @@ public class CommentService {
 	}
 	
 	public Comment create(String isbn, Comment comment) {
-		Optional<Book> book = BookService.getBook(isbn);
+		Optional<Book> book = bookService.getBook(isbn);
 		
 		if(!book.isPresent()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
 		}
 		
-		book.get()
-			.getComments()
-			.add(comment);
+		List<Comment> comments = book.get().getComments();
+		comment.setId(comments.size() + 1);
+		comment.setCreatedAt(new Date());
+		comments.add(comment);
 		
 		return comment;
 	}
 	
 	public Comment update(String isbn, Comment comment) {
-		Optional<Book> maybeBook = BookService.getBook(isbn);
+		Optional<Book> maybeBook = bookService.getBook(isbn);
 		
 		if(maybeBook.isPresent()) {
 			List<Comment> comments = maybeBook.get().getComments();
@@ -68,8 +84,11 @@ public class CommentService {
 				.findFirst();
 			
 			if(oldComment.isPresent()) {
-				comment.setCreatedAt(oldComment.get().getCreatedAt());
-				comments.remove(oldComment.get());
+				Comment tmp = oldComment.get();
+				comment.setCreatedAt(tmp.getCreatedAt());
+				comment.setId(tmp.getId());
+				
+				comments.remove(tmp);
 				comments.add(comment);
 				return comment;
 			}
@@ -81,7 +100,7 @@ public class CommentService {
 	}
 	
 	public void delete(String isbn, Integer id) {
-		Optional<Book> maybeBook = BookService.getBook(isbn);
+		Optional<Book> maybeBook = bookService.getBook(isbn);
 		
 		if(maybeBook.isPresent()) {
 			List<Comment> comments = maybeBook.get().getComments();

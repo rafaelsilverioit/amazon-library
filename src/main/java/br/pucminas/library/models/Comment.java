@@ -1,4 +1,4 @@
-package br.pucminas.library.dao;
+package br.pucminas.library.models;
 
 import java.util.Date;
 
@@ -9,14 +9,19 @@ import io.swagger.annotations.ApiModel;
 
 @ApiModel
 public class Comment {
-	@NotNull private Integer id;
-	@NotNull private Integer userId;
-	@NotBlank private String content;
-	
+	private Integer id;
+
+	@NotNull
+	private Integer userId;
+
+	@NotBlank
+	private String content;
+
 	private Date createdAt;
-	
-	public Comment() {}
-	
+
+	public Comment() {
+	}
+
 	public Comment(Integer id, Integer userId, String content) {
 		this.id = id;
 		this.userId = userId;

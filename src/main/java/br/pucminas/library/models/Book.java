@@ -1,4 +1,4 @@
-package br.pucminas.library.dao;
+package br.pucminas.library.models;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,18 +13,26 @@ import io.swagger.annotations.ApiModel;
 
 @ApiModel
 public class Book {
-	@NotBlank private String isbn;
-	@NotBlank private String name;
-	@NotBlank private String description;
-	@NotNull private Integer author;
-	
+	@NotBlank
+	private String isbn;
+
+	@NotBlank
+	private String name;
+
+	@NotBlank
+	private String description;
+
+	@NotNull
+	private Integer author;
+
 	private Date createdAt;
-	
+
 	@JsonIgnore
 	private List<Comment> comments = new ArrayList<>();
-	
-	public Book() {}
-	
+
+	public Book() {
+	}
+
 	public Book(String isbn, String name, String description, Integer author) {
 		this.isbn = isbn;
 		this.name = name;
@@ -60,11 +68,11 @@ public class Book {
 	public Integer getAuthor() {
 		return author;
 	}
-	
+
 	public Date getCreatedAt() {
 		return createdAt;
 	}
-	
+
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
