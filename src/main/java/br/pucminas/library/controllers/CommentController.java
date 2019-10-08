@@ -45,9 +45,9 @@ public class CommentController {
 			@ApiParam(required = true, value = "Código ISBN do livro.")
 			@PathVariable("isbn")
 			String isbn,
-			@ApiParam(required = true, value = "ID do livro.")
+			@ApiParam(required = true, value = "UUID do livro.")
 			@PathVariable("id")
-			Integer id) {
+			String id) {
 		return service.comment(isbn, id);
 	}
 	
@@ -83,9 +83,9 @@ public class CommentController {
 			@ApiParam(required = true, value = "Código ISBN do livro.")
 			@PathVariable("isbn")
 			String isbn,
-			@ApiParam(required = true, value = "ID do comentário.")
+			@ApiParam(required = true, value = "UUID do comentário.")
 			@PathVariable("id")
-			Integer id) {
+			String id) {
 		service.delete(isbn, id);
 	}
 }

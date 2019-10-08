@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,10 +43,10 @@ public class BasketService {
 			return maybeBasket;
 		}
 		
-		Basket basket = new Basket(baskets.size() + 1, userId, new Date());
+		Basket basket = new Basket(UUID.randomUUID().toString(), userId, new Date());
 		List<BasketItem> items = basket.getItems();
 		
-		item.setId(items.size() + 1);
+		item.setId(UUID.randomUUID().toString());
 		items.add(item);
 		
 		baskets.add(basket);

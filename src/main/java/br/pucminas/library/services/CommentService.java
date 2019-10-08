@@ -3,6 +3,7 @@ package br.pucminas.library.services;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,7 @@ public class CommentService {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
 	}
 	
-	public Comment comment(String isbn, Integer id) {
+	public Comment comment(String isbn, String id) {
 		Optional<Book> book = bookService.getBook(isbn);
 		
 		if(book.isPresent()) {
@@ -66,7 +67,7 @@ public class CommentService {
 		}
 		
 		List<Comment> comments = book.get().getComments();
-		comment.setId(comments.size() + 1);
+		comment.setId(UUID.randomUUID().toString());
 		comment.setCreatedAt(new Date());
 		comments.add(comment);
 		
@@ -99,7 +100,7 @@ public class CommentService {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
 	}
 	
-	public void delete(String isbn, Integer id) {
+	public void delete(String isbn, String id) {
 		Optional<Book> maybeBook = bookService.getBook(isbn);
 		
 		if(maybeBook.isPresent()) {

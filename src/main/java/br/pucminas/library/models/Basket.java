@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModel;
 
 @ApiModel
 public class Basket {
-	private Integer id;
+	private String id;
 	
 	@NotNull
 	private Integer userId;
@@ -23,18 +23,17 @@ public class Basket {
 	public Basket() {
 	}
 
-	public Basket(Integer id, Integer userId, Date createdAt) {
-		super();
+	public Basket(String id, Integer userId, Date createdAt) {
 		this.id = id;
 		this.userId = userId;
 		this.createdAt = createdAt;
 	}
 
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
