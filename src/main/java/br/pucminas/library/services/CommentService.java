@@ -1,18 +1,17 @@
 package br.pucminas.library.services;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import br.pucminas.library.Pagination;
+import br.pucminas.library.models.Book;
+import br.pucminas.library.models.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.pucminas.library.Pagination;
-import br.pucminas.library.models.Book;
-import br.pucminas.library.models.Comment;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CommentService {
@@ -28,11 +27,10 @@ public class CommentService {
 			List<Comment> comments = book.get().getComments();
 			int size = comments.size();
 			
-			List<Comment> subList = comments.subList(offset, (newLimit <= size ? newLimit : size));
+			List<Comment> subList = comments.subList(offset, (Math.min(newLimit, size)));
 			offset = offset <= size ? offset : size;
 			
-			Pagination<Comment> paginated = new Pagination<Comment>(subList, limit, offset);
-			return paginated;			
+			return new Pagination<Comment>(subList, limit, offset);
 		}
 		
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found!");
@@ -46,7 +44,7 @@ public class CommentService {
 				.get()
 				.getComments()
 				.stream()
-				.filter(c -> c.getId() == id)
+				.filter(c -> c.getId().equals(id))
 				.findFirst();
 			
 			if(comment.isPresent()) {
@@ -81,7 +79,7 @@ public class CommentService {
 			List<Comment> comments = maybeBook.get().getComments();
 			Optional<Comment> oldComment = comments
 				.stream()
-				.filter(c -> c.getId() == comment.getId())
+				.filter(c -> c.getId().equals(comment.getId()))
 				.findFirst();
 			
 			if(oldComment.isPresent()) {
@@ -108,7 +106,7 @@ public class CommentService {
 			
 			Optional<Comment> comment = comments
 				.stream()
-				.filter(c -> c.getId() == id)
+				.filter(c -> c.getId().equals(id))
 				.findFirst();
 			
 			if(comment.isPresent()) {

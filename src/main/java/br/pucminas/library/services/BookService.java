@@ -1,23 +1,18 @@
 package br.pucminas.library.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import br.pucminas.library.Pagination;
+import br.pucminas.library.models.Book;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.pucminas.library.Pagination;
-import br.pucminas.library.models.Book;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
-	private final List<Integer> authors = Arrays.asList(new Integer[] {1, 2});
+	private final List<Integer> authors = Arrays.asList(1, 2);
 	
 	private final List<Book> books = new ArrayList<>();
 	
@@ -29,7 +24,6 @@ public class BookService {
 		List<Book> books = this.books
 			.stream()
 			.filter(b -> {
-				
 				String isbn = book.getIsbn();
 				String name = book.getName();
 				String description = book.getDescription();
@@ -38,7 +32,7 @@ public class BookService {
 				boolean matchesIsbn = !StringUtils.isEmpty(isbn) && b.getIsbn().equalsIgnoreCase(isbn);
 				boolean matchesName = !StringUtils.isEmpty(name) && b.getName().equalsIgnoreCase(name);
 				boolean matchesDescription = !StringUtils.isEmpty(description) && b.getDescription().equalsIgnoreCase(description);
-				boolean matchesAuthor = author != null && b.getAuthor() == author;
+				boolean matchesAuthor = b.getAuthor().equals(author);
 				
 				return matchesIsbn || matchesName || matchesDescription || matchesAuthor;
 			})
@@ -47,11 +41,10 @@ public class BookService {
 		int newLimit = offset + limit;
 		int size = books.size();
 		
-		List<Book> subList = books.subList(offset, (newLimit <= size ? newLimit : size));
+		List<Book> subList = books.subList(offset, (Math.min(newLimit, size)));
 		offset = offset <= size ? offset : size;
 		
-		Pagination<Book> paginated = new Pagination<Book>(subList, limit, offset);
-		return paginated;
+		return new Pagination<Book>(subList, limit, offset);
 	}
 	
 	public Book book(String isbn) {

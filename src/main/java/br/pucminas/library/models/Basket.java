@@ -1,14 +1,20 @@
 package br.pucminas.library.models;
 
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
+
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
-import io.swagger.annotations.ApiModel;
-
 @ApiModel
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Basket {
 	private String id;
 	
@@ -18,46 +24,12 @@ public class Basket {
 	@NotNull
 	private Date createdAt;
 	
+	@Singular
 	private List<BasketItem> items = new ArrayList<>();
-
-	public Basket() {
-	}
 
 	public Basket(String id, Integer userId, Date createdAt) {
 		this.id = id;
 		this.userId = userId;
 		this.createdAt = createdAt;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public List<BasketItem> getItems() {
-		return items;
-	}
-
-	public void setItems(List<BasketItem> items) {
-		this.items = items;
 	}
 }

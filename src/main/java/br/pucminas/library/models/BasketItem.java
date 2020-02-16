@@ -1,11 +1,17 @@
 package br.pucminas.library.models;
 
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import io.swagger.annotations.ApiModel;
-
 @ApiModel
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BasketItem {
 	private String id;
 	
@@ -14,38 +20,4 @@ public class BasketItem {
 	
 	@NotBlank
 	private String isbn;
-	
-	public BasketItem() {
-	}
-	
-	public BasketItem(String id, String isbn, Integer quantity) {
-		super();
-		this.id = id;
-		this.isbn = isbn;
-		this.quantity = quantity;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getIsbn() {
-		return isbn;
-	}
-
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
 }

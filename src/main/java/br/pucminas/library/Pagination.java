@@ -1,9 +1,18 @@
 package br.pucminas.library;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
+
 import java.util.List;
 
-public class Pagination<T extends Object> {
-	private List<T> data;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Pagination<T> {
+	@Singular
+	private List<T> items;
 
 	private Integer limit;
 
@@ -13,54 +22,13 @@ public class Pagination<T extends Object> {
 
 	private Integer count;
 
-	public Pagination() {
-	}
-
-	public Pagination(List<T> data, Integer limit, Integer offset) {
-		this.data = data;
+	public Pagination(List<T> items, Integer limit, Integer offset) {
+		this.items = items;
 		this.limit = limit;
 		this.offset = offset;
-		this.total = data.size();
-		this.count = data == null ? 0 : data.size();
-	}
 
-	public List<T> getData() {
-		return data;
-	}
-
-	public void setData(List<T> data) {
-		this.data = data;
-	}
-
-	public Integer getLimit() {
-		return limit;
-	}
-
-	public void setLimit(Integer limit) {
-		this.limit = limit;
-	}
-
-	public Integer getOffset() {
-		return offset;
-	}
-
-	public void setOffset(Integer offset) {
-		this.offset = offset;
-	}
-
-	public Integer getTotal() {
-		return total;
-	}
-
-	public void setTotal(Integer total) {
-		this.total = total;
-	}
-
-	public Integer getCount() {
-		return count;
-	}
-
-	public void setCount(Integer count) {
+		int count = items == null ? 0 : items.size();
+		this.total = count;
 		this.count = count;
 	}
 }

@@ -1,20 +1,14 @@
 package br.pucminas.library.services;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import br.pucminas.library.models.Basket;
+import br.pucminas.library.models.BasketItem;
+import br.pucminas.library.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.pucminas.library.models.Basket;
-import br.pucminas.library.models.BasketItem;
-import br.pucminas.library.models.Book;
+import java.util.*;
 
 @Service
 public class BasketService {
@@ -23,7 +17,7 @@ public class BasketService {
 	
 	public static final List<Basket> baskets = new ArrayList<>();
 	
-	private final List<Integer> users = Arrays.asList(new Integer[] {1, 2});
+	private final List<Integer> users = Arrays.asList(1, 2);
 	
 	public Basket getBasketFor(Integer userId) {
 		return findBasketFor(userId);
@@ -60,11 +54,7 @@ public class BasketService {
 			return;
 		}
 	
-		List<BasketItem> items = maybeBasket.getItems();
-		
-		if(items.contains(item)) {
-			items.remove(item);
-		}
+		maybeBasket.getItems().remove(item);
 	}
 	
 	public void deleteBasketFor(Integer userId) {
@@ -75,21 +65,16 @@ public class BasketService {
 	private Basket findBasketFor(Integer userId) {
 		Optional<Basket> maybeBasket = baskets
 			.stream()
-			.filter(b -> b.getUserId() == userId)
+			.filter(b -> b.getUserId().equals(userId))
 			.findFirst();
-		
-		if(maybeBasket.isPresent()) {
-			
-			return maybeBasket.get();
-		}
-		
-		return null;
+
+		return maybeBasket.orElse(null);
 	}
 	
 	private void findUserOrThrowException(Integer userId) {
 		Long matches = users
 			.stream()
-			.filter(u -> u == userId)
+			.filter(u -> u.equals(userId))
 			.count();
 		
 		if(matches.compareTo(1L) != 0) {
